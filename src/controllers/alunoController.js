@@ -42,11 +42,17 @@ const alunoController = {
             try {
                 const {ID_Aluno} = req.params;
                 const {nomeAluno, cpfAluno, dataNascimentoAluno, emailAluno, telefoneAluno, enderecoAluno} = req.body;
-    
+
                 let aluno = await alunoModel.findByPk(ID_Aluno);
                 if(!aluno){
                     return res.status(404).json({message: "Aluno não encontrado!"});
                 }
+                
+                let consultaAluno = await alunoModel.findOne({where: {[Op.or]: [{cpfAluno}, {emailAluno}]}});
+                if(consultaAluno){
+                    return res.status(409).json({message: "Email ou cpf já cadastrado"});
+                }
+                
                 let dadosAtualizados = {nomeAluno, cpfAluno, dataNascimentoAluno, emailAluno, telefoneAluno, enderecoAluno};
     
                 await alunoModel.update(dadosAtualizados, {where:{ID_Aluno}});
