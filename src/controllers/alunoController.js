@@ -1,11 +1,25 @@
 const { alunoModel } = require('../models/alunoModel');
-const { Op } = require('sequelize')
+const { Op, where } = require('sequelize')
 const { parseDateBd} = require('../utils/dateUtils');
 
 const alunoController = {
     listarAluno: async (req, res) => {
             try {
-                let alunos = await alunoModel.findAll();
+                let {nomeAluno} = req.query;
+
+                let conditions = {};
+
+                if (ID_Aluno) {
+                    conditions.ID_Aluno = ID_Aluno;
+                }
+
+                if (nomeAluno) {
+                    conditions.nomeAluno = nomeAluno;
+                }
+
+                let alunos = await alunoModel.findAll({
+                    where: conditions
+                });
 
                 //map percorre a array e gera uma nova aplicando o mapeamento para cara dado contido na array
                 aluno = alunos.map(aluno => {
