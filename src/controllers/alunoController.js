@@ -1,10 +1,18 @@
 const { alunoModel } = require('../models/alunoModel');
 const { Op } = require('sequelize')
+const { parseDateBd} = require('../utils/dateUtils');
 
 const alunoController = {
     listarAluno: async (req, res) => {
             try {
                 let alunos = await alunoModel.findAll();
+
+                //map percorre a array e gera uma nova aplicando o mapeamento para cara dado contido na array
+                aluno = alunos.map(aluno => {
+                    aluno.dataNascimentoAluno = parseDateBd(aluno.dataNascimentoAluno);
+                    return aluno;
+                })
+
                 return res.status(200).json(alunos);
             } catch (error) {
                 console.error(`Erro ao listar alunos`, error)
