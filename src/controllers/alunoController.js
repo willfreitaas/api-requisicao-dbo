@@ -18,7 +18,10 @@ const alunoController = {
                 }
 
                 let alunos = await alunoModel.findAll({
-                    where: conditions
+                    where:{
+                        {ID_Aluno: {[Op.eq]: conditions.ID_Aluno}},
+                        {nomeAluno: {[Op.substring]: conditions.nomeAluno}}
+                    }
                 });
 
                 //map percorre a array e gera uma nova aplicando o mapeamento para cara dado contido na array
